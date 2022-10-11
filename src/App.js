@@ -2,7 +2,7 @@ import { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import * as Tone from 'tone';
-import { notes, stepSize } from './sources/notes';
+import {notes, octaveDivisions, stepSize} from './sources/notes';
 import tau from './sources/tau';
 import pi from './sources/pi';
 
@@ -24,10 +24,16 @@ function App() {
 
   const scale = [];
   let displayText = '';
+  let displayPosition = 0;
 
   const updateText = newString => {
     displayText += newString;
     setText(displayText);
+  }
+
+  const incrementPosition = () => {
+    displayPosition++;
+    setPosition(displayPosition);
   }
 
   async function start() {
@@ -58,20 +64,14 @@ function App() {
       const noteDuration = '8n';
       digits[index].time = clockTime;
       clockTime += Tone.TransportTime(noteDuration).toSeconds();
-      /*Tone.Transport.schedule(time => {
-        synth.triggerAttackRelease(digit.note, noteDuration);
-        Tone.Draw.schedule(() => {
-          updateText(digit.digit);
-        }, time);
-        console.log(time);
-      }, clockTime);
-      clockTime += Tone.TransportTime(noteDuration).toSeconds();*/
+      console.log(digit);
     }
 
-    const part = new Tone.Part(((time, value) => {
+    new Tone.Part(((time, value) => {
       synth.triggerAttackRelease(value.note, "8n", time);
       Tone.Draw.schedule(() => {
         updateText(value.digit);
+        incrementPosition();
       }, time);
     }), digits).start('1m');
 
@@ -86,7 +86,7 @@ function App() {
   }
 
   function generateScale() {
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < octaveDivisions; i++) {
       scale.push(centsToHertz(i * stepSize));
     }
   }

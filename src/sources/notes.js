@@ -1,3 +1,8 @@
+export const octaveDivisions = 10;
+export const stepSize = 1200 / octaveDivisions;
+
+//export const centsScale = Array.from({length: octaveDivisions}, (_, n) => n * stepSize);
+
 export const notes = {
   'c': 130.813,
   'c#': 138.591,
@@ -12,5 +17,3 @@ export const notes = {
   'a#': 233.082,
   'b': 246.942
 };
-
-export const stepSize = 120;
